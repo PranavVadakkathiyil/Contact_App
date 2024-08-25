@@ -1,0 +1,7 @@
+exports.constent={
+    VALIDATION_ERR :400,
+    UNAUTHERIZED:401,
+    FORBIDDEN:403,
+    NOTFOUND:404,
+    SERVER_ERR:500
+} 
