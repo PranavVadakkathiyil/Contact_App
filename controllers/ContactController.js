@@ -4,7 +4,7 @@ const Contact = require("../model/contactModel");
 //@route GET /api/contact
 //@access public
 const getContacts = asyncHandler(async (req, res) => {
-  const contacts = await Contact.find();
+  const contacts = await Contact.find({user_id:req.user.id});
   res.status(200).json(contacts);
   console.log(contacts);
 });
@@ -27,6 +27,7 @@ const createContact = asyncHandler(async (req, res) => {
     name,
     email,
     phone,
+    user_id:req.user.id
   });
   res.json(contact);
 });
@@ -52,6 +53,9 @@ const updateContact = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("contact not found");
   }
+  if(contact.user_id.toString() !== req.user.id){
+    return res.status(403).json({message:"user not authenticated"})
+  }
   const updateContact = await Contact.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -71,7 +75,7 @@ const deleteContact = asyncHandler(async (req, res) => {
 
     throw new Error("contact not found"); 
   }
-  await Contact.findByIdAndDelete(req.params.id);
+  await Contact.deleteOne({_id:req.params.id});
   res.json(contact);
 });
 

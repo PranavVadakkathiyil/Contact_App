@@ -1,46 +1,47 @@
-const {constent}=require('../constents')
+const { constent } = require('../constents');
+
 const errorHandler = (err, req, res, next) => {
   const statusCode = res.statusCode ? res.statusCode : 500;
+
   switch (statusCode) {
     case constent.VALIDATION_ERR:
-      res.json({
-        title: "vaildation error",
+      return res.json({
+        title: "Validation Error",
         message: err.message,
         stackTrace: err.stack,
       });
-      break;
+    
     case constent.UNAUTHERIZED:
-      res.json({
-        title: "unautherrized",
+      return res.json({
+        title: "Unauthorized",
         message: err.message,
         stackTrace: err.stack,
       });
-      break;
-      case constent.FORBIDDEN:
-      res.json({
-        title: "forbidden",
+    
+    case constent.FORBIDDEN:
+      return res.json({
+        title: "Forbidden",
         message: err.message,
         stackTrace: err.stack,
       });
-      break;
-      case constent.NOTFOUND:
-      res.json({
-        title: "page not found",
+    
+    case constent.NOTFOUND:
+      return res.json({
+        title: "Page Not Found",
         message: err.message,
         stackTrace: err.stack,
       });
-      break;
-      case constent.SERVER_ERR:
-      res.json({
-        title: "server error",
+    
+    case constent.SERVER_ERR:
+      return res.json({
+        title: "Server Error",
         message: err.message,
         stackTrace: err.stack,
       });
-      break;
+    
     default:
-        res.json({message:"no error"})
-      break;
+      return res.json({ message: "No error" });
   }
-  res.json({ message: err.message, stackTrace: err.stack });
 };
+
 module.exports = errorHandler;
